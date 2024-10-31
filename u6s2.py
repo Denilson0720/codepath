@@ -100,13 +100,14 @@ PLAN
   return None
 IMPLEMENT
 '''
-def find_last_node_in_cycle(head):
-  curr = head.next
-  while curr:
-    if curr.next == head:
-      return curr.value
-    curr = curr.next
-  return None
+# WRONG
+# def find_last_node_in_cycle(head):
+#   curr = head.next
+#   while curr:
+#     if curr.next == head:
+#       return curr.value
+#     curr = curr.next
+#   return None
 head = Node(1)
 node2 = Node(2)
 node3 = Node(3)
@@ -116,7 +117,44 @@ node2.next = node3
 node3.next = node4
 node4.next = head
 test2 = Node(1,Node(2,Node(3,Node(4,Node(1)))))
+
+def find_last_node_in_cycle(head):
+    if not head or not head.next:
+        return None
+
+    slow = fast = head
+    has_cycle = False
+
+    # Phase 1: Detecting the cycle using the Floyd's Cycle Detection Algorithm
+    # here we just check if there is a cycle
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow == fast:
+            has_cycle = True
+            break
+
+    # If there's no cycle, return None
+    if not has_cycle:
+        return None
+    # 1,2,3,4 and 4 back to 2
+
+    # Phase 2: Identifying the start of the cycle
+    slow = head
+    while slow != fast:
+        slow = slow.next
+        fast = fast.next
+
+    # Find the last node in the cycle
+    cycle_start = slow
+    last_node = cycle_start
+    while last_node.next != cycle_start:
+        last_node = last_node.next
+
+    return last_node.value
+
 print(find_last_node_in_cycle(head))
+# shoudl return None as there is no cycle
 print(find_last_node_in_cycle(test2))
 print('END OF QUESTION 2')
 '''
