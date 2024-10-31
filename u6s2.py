@@ -152,7 +152,37 @@ def find_last_node_in_cycle(head):
         last_node = last_node.next
 
     return last_node.value
+'''
 
+Input: A list with a cycle (e.g., 1 -> 2 -> 3 -> 4 -> 5 -> 2)
+
+PHASE 1
+1   2   3   4   5   BACK TO 2
+SF
+    S.  F
+        S.      F 
+        F   S          
+                SF<- THEY MET AGAIN, there is a cycle
+
+PHASE 2
+OUR SECOND ITERATION
+Move slow and fast pointer by 1 node per step, and they'll meet at the start of the cycle
+They met at Node 2
+1.  2.  3.  4.  5
+S               F
+    SF 
+
+PHASE 3
+NOW SAVE THIS CYCLE START, cycle_start = slow or fast
+Using another pointer (last_node) move it until its .next is cycle_start
+SHOULD GIVE YOU LAST NODE
+1   2   3.  4.  5
+   C L 
+    C   L
+    C        L 
+    C            L and its .next is C so return L
+   
+'''
 print(find_last_node_in_cycle(head))
 # shoudl return None as there is no cycle
 print(find_last_node_in_cycle(test2))
