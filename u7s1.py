@@ -19,17 +19,21 @@ repeat_hello(5)
 UNDERSTAND
     what does it mean to have a recursive function?
         being able to break down a big problem into many smaller ones
+        where the base case is the stopping point of the recursion and our recursive case is where the function calls itself with a smaller or simpler version of the problem
     what are the benefits of using a recursive function?
         breaking down the problem and being able to think of the smallest version
     what part of the function prevents our recursive function from going on forever?
         base case
+    what is the recursive case?
+    in the solution above, what is the base case?
 PLAN
-    use the recursive function
+    use the recursive functions
     make an iterative function
     compare both
 IMPLEMENT
 '''
 def repeat_hello(n):
+    # base case covered by n>0, once we reach 0 we wont be able to call the function anymore
     if n>0:
         print('hello')
         repeat_hello(n-1)
@@ -148,12 +152,39 @@ def is_power_of_two(n):
 	pass
 UNDERSTAND
     what do power of two look like?
-        wheer the result is n
-        2**0 = 1
+        look for an x(power of)where the result is n
+        2**0 = 1 -> this is our base case
         2**1 = 2
         2**2 = 4
         2**3 = 8
         2**4 = 16
+        2**5 = 32
+        
+        what can we take away from this? what relation do you see?
+            *in order for a number n to be a power of two, it has to be completely divisble by 2, no remainder*
+            *if a number is not divisble by 2, then we can rule it out completely*
+            say we have n == 33 and 33%2!=0 so False
+            say we have n == 32 and 32%2==0 so True but we must check all of its n//2 values as well to make sure they are also divisble by 2.
+            power of 2s must be divisle by 2 and divisble by 2 numbers must be even, but evens dont guarantee being a power of 2
+    --->   power of 2s must be even, BUT evens dotn guarantee being a power of 2, ex: 6, 18, 30
+    NEGATIVE CASE:
+        n = 6
+        6%2 == 0 -> move on to next recursive step, n//2 n = 3
+        3%2 !=0 -> return False
+        6 is not a power of 2
+    POSITIVE CASE:
+        n = 96
+        96%2==0 -> move on n//2 n = 48
+        48%2 == 0 -> move on n//2 n == 24
+        24%2==0 -> move on n//2 n==16
+        16%2 ==0 -> move on n//2 n==8
+        8%2==0 -> move on n//2 n==4
+        4%2==0 -> move on n//2 n==2
+        2%2==0 -> move on n//2 n==1
+        n==1 weve reached base case , return True
+    96 is a power of 2
+
+
     how would we solve this iteratively?
     break this problem down to the very last step
         what would our base case look like?

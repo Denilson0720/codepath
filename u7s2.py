@@ -77,7 +77,7 @@ IMPLEMENT
 def count_ones(lst):
     start = 0
     end = len(lst) - 1
-    first_occurance = 0
+    first_occurance = -1
     while start<=end:
         mid = start + (end-start)//2
         if lst[mid] ==1:
@@ -85,12 +85,16 @@ def count_ones(lst):
             end = mid -1
         else:
             start = mid+1
+    # if we never found a 1 then return 0 
+    if first_occurance ==-1:
+       return 0
     return len(lst) - first_occurance
 print(count_ones([0,0,0,0,1,1,1]))
 print('END OF QUESITON 2')
 '''
 Problem 3: Binary Search IV
-Thus far, we’ve mostly been using an iterative implementation of the binary search algorithm. Recursive implementations of binary search are also very common. Implement binary_search() recursively.
+Thus far, we’ve mostly been using an iterative implementation of the binary search algorithm. 
+Recursive implementations of binary search are also very common. Implement binary_search() recursively.
 
 def binary_search(nums, target):
   pass
@@ -102,14 +106,42 @@ Example Output:
 # Expected Output: 5
 # Explanation: 11 has index 5 in the list
 UNDERSTAND
-  -how can we think of binary search in a recursive manner?
-  -base cases?
+  what does binary search look like iteratively?
+  how can we think of binary search in a recursive manner?
+  what can our base case be?
+    target not found
+      left and right pass each, left>right
+    target found
+      lst[mid] = target
+  what can our recursive cases be?
+    if mid < target:
+      provide a new sublist ignring all left side
+      left = mid+1
+    else mid>target:
+      provide a new sublist ignoring all right side
+      right = mid-1
 PLAN
   -instead of manually moving our pointers left and right
   -call the method recursively but with either:
     left being moved to mid+1
     right being moved to mid-1
 '''
+# what does binary search look like iteratively?
+def binary_search_iteratively(lst,target):
+    left = 0
+    right = len(lst) - 1
+    while left<=right:
+        mid = left+(right-left)//2
+        if lst[mid] == target:
+            return mid
+        elif lst[mid]<target:
+            print(lst[mid],' is less than ', target,' moved left up')
+            left = mid+1
+        else:
+            print(lst[mid],' is greater than ', target, ' moved right down')
+            right = mid - 1
+    return -1
+
 def binary_search_recursive(arr, target, left=0, right=None):
   if right is None:
       right = len(arr) - 1
@@ -119,19 +151,38 @@ def binary_search_recursive(arr, target, left=0, right=None):
       return -1  # Target not found
 
   mid = (left + right) // 2
-
   if arr[mid] == target:
       return mid  # Target found
   elif arr[mid] < target:
       return binary_search_recursive(arr, target, mid + 1, right)
   else:
       return binary_search_recursive(arr, target, left, mid - 1)
+  
+def binary_search_recursive_two(arr,target):
+  right = len(arr)-1
+  left = 0
+  #base case
+  # if pointers have surpassed each other
+  if left>right:
+    return -1
+  mid = (left+right)//2
+  print(arr, 'and mid is ',mid)
+  if arr[mid]<target:
+    #  return try with sublist ignoring all of left side
+     return binary_search_recursive_two(arr[mid+1:],target)
+  else:
+    #  return try with sublist , ignoring all of right side
+     return binary_search_recursive_two(arr[:mid-1],target)
+
+
 
 # Example Usage
 arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 target = 7
 
 print(binary_search_recursive(arr,7))
+print('trying with second function')
+print(binary_search_recursive_two(arr,7))
 print('END OF QUESTION 3')
 '''
 Problem 4: Count Rotations
