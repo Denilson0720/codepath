@@ -138,7 +138,9 @@ Input: root = 4
 Expected Output: 1
 UNDERSTAND
   what is being reffered to by height?
-  what traversal can we use here?
+    -the number of edges between the root node and the deepest child node
+  is there an inbuilt method that can we use here?
+  what traversal can we use here that can be helpful to us?
   will a recursion or iterative method work best?
 PLAN 
   RECURSIVE
@@ -225,7 +227,7 @@ UNDERSTAND
     if our key is greater than or less than to a current node key, we can go either down the left or right subtree
 PLAN
   RECURSION
-  MAKE CONDITIONAL CHECKS USING KE
+  MAKE CONDITIONAL CHECKS USING KEY
   if root is None, make new Node, return Node(meaning tree is empty)
   if key < root: GO DOWN LEFT SUBTREE(BECUASE BST ORDER)
     recursively go down the left side, insert(root.left,key,value)

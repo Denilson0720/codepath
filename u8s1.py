@@ -296,3 +296,369 @@ one.left = two
 two.left = three
 print(left_most_recursively(one))
 print('END OF QUESTION 5')
+'''
+Problem 6: In-order Traversal
+Given the root of a binary tree, return a list representing the inorder traversal of its nodes' values. In an inorder traversal we traverse the left subtree, then the current node, then the right subtree.
+
+class TreeNode():
+     def __init__(self, val, left=None, right=None):
+         self.val = val
+         self.left = left
+         self.right = right
+
+def inorder_traversal(root):
+	pass
+
+Example Usage:
+
+Example Input Tree #1: 
+     1
+      \
+       2
+      / 
+     3    
+
+Input: root = 1
+Expected Output: [1,3,2]
+
+Example Input Tree #2 : 
+
+Input: root = None
+Output: []
+
+Example Input Tree #3:
+    1  
+
+Input: root = 1
+Output: [1]
+UNDERSTAND
+    what is inorder traversal?
+        left root right
+    what is our base case, when do we stop going down our tree?
+    what can we do to add to a list but make sure it doesnt get overwritten with every recursive step?
+PLAN
+    parent function(node):
+    lst = []
+        child_function(): the one that does the traversal and adds to lst
+            if not node:
+                return None
+            if node:
+                inorder(left)
+                lst.append(node.val)
+                inorder(right)
+
+'''
+def inorder_traversal(root):
+    lst = []
+    def traversal(root):
+        if not root:
+            return None
+        if root:
+            traversal(root.left)
+            # print(root.val)
+            lst.append(root.val)
+            traversal(root.right)
+    traversal(root)
+    return lst
+one = TreeNode(1)
+two = TreeNode(2)
+three = TreeNode(3)
+
+one.right = two
+two.left = three
+print(inorder_traversal(one))
+print('END OF QUESTION 6')
+'''
+Problem 7: Binary Tree Size
+Given the root of a binary tree, write a function size() that returns the number of nodes in the binary tree.
+
+Evaluate the time complexity of your function.
+
+class TreeNode():
+     def __init__(self, val, left=None, right=None):
+         self.val = val
+         self.left = left
+         self.right = right
+   
+def size(root):
+	pass
+
+Example Usage:
+
+Example Input Tree #1: 
+
+      4
+     / \
+    /   \
+   2     5
+  / \    
+ 1   3    
+
+Input: root = 4
+Expected Output: 5
+
+Example Input Tree #2: 
+
+Empty tree (None)
+Input: root = None
+Expected Output: 0
+UNDERSTAND
+    what question is similar to this one?
+    do we have to visit every single node?
+    would it be helpful to have a helper function?
+        -have a sum to add to within scope?
+PLAN
+    parent function(root):
+        sum = 0
+        helper(root): the one that does traversala and adds to sum
+            if not Node:
+                return 0
+            if Node:
+                helper(root.left)
+                sum+=1
+                helper(root.right)
+        return sum
+IMPLEMENT
+'''
+# print(size(one))
+def size(root):
+    if not root:
+        return 0
+    return 1 + size(root.left) + size(root.right)
+print(size(one))
+print('END OF QUESITON 7')
+'''
+Problem 8: Binary Tree Find
+Given a value and the root of a tree, write a function find() that returns True if there is a node with the given value in the tree. Assume the tree is balanced.
+
+Evaluate the time complexity of your solution.
+
+class TreeNode():
+     def __init__(self, val, left=None, right=None):
+         self.val = val
+         self.left = left
+         self.right = right
+   
+def find(root, value):
+	pass
+
+Example Input Tree #1: 
+
+      1
+     / \
+    /   \
+   2     5
+  / \    
+ 4   3    
+
+Input: root = 1, value = 5
+Expected Output: True
+
+Example Input Tree #2: 
+
+      1
+     / \
+    /   \
+   2     5
+  / \    
+ 4   3    
+
+Input: root = 1, value = 10
+Expected Output: False
+UNDERSTAND
+    do we have to visit every node?
+    base case?
+        if root.val = key:
+            return True
+        else root.left==None and root.right ==None:
+            return False
+    recursive case?
+        return left and right traversal
+IMPLEMENT
+'''
+
+def find(root,value):
+    if root is None:
+        return False
+    if root.val == value:
+        return True
+    print(root.val)
+    # if root.left == None and root.right== None:
+        # return False
+    # we use or instead of and because we just care if the value is found anywhere in the tree
+    # if we used and then it would need to be found in the left and right subtree to return True, which is wrong
+    return find(root.left,value) or find(root.right,value)
+
+'''
+      1
+     / \
+    /   \
+   2     5
+  / \    
+ 4   3   
+'''
+class TreeNode:
+    def __init__(self,val,left =None,right = None):
+        self.val =val
+        self.right = right
+        self.left = left
+    
+one = TreeNode(1)
+two = TreeNode(2)
+four = TreeNode(4)
+three = TreeNode(3)
+five = TreeNode(5)
+one.left = two
+one.right = five
+two.left = four
+two.right = three
+# print('meow')
+print(inorder_traversal(one))
+print(find(one,4))
+print('END OF QUESTION 8')
+'''
+Problem 9: Binary Search Tree Find
+Given a value and the root of a binary search tree,
+ write a function find_bst() that returns True if there is a node with the given value in the tree.
+Assume the tree is balanced.
+
+class TreeNode():
+     def __init__(self, val, left=None, right=None):
+         self.val = val
+         self.left = left
+         self.right = right
+   
+def find_bst(root, value):
+	pass
+
+
+# Example Input Tree #1: 
+
+      4
+     / \
+    /   \
+   2     5
+  / \    
+ 1   3    
+
+Input: root = 4, value = 5
+Expected Output: True
+
+Example Input Tree #2: 
+
+      4
+     / \
+    /   \
+   2     5
+  / \    
+ 1   3    
+
+Input: root = 4, value = 10
+Expected Output: False
+UNDERSTAND
+    what are the characterisitcs of a bst tree?
+    do we HAVE to look at every single node in the tree?
+        -no since it is a bst it is ordered in such a way that we ignore specific branches
+PLAN
+    base case:
+        if we reach an None: 
+            return False
+        if we find the node:
+            return True
+        if value>root.val:
+            return root.right
+        if value<root.val:
+            return root.left
+'''
+def bst_find(root,value):
+    if root is None:
+        return False
+    if root.val == value:
+        return True
+    if value>root.val:
+        return bst_find(root.right,value)
+    else:
+        return bst_find(root.left,value)
+'''
+      4
+     / \
+    /   \
+   2     5
+  / \    
+ 1   3    
+'''
+one = TreeNode(1)
+two = TreeNode(2)
+four = TreeNode(4)
+three = TreeNode(3)
+five = TreeNode(5)
+four.left = two
+four.right = five
+two.left = one
+two.right = three
+print(inorder_traversal(four))
+print(bst_find(four,5))
+print(bst_find(four,1))
+print(bst_find(four,6))
+print('END OF QUESTION 9')
+'''
+Problem 10: BST Descending Leaves
+Given the root of a binary search tree, write a function descending_leaves() that returns a list of the values of all leaves in the BST in descending order. Assume the tree is balanced.
+
+class TreeNode():
+     def __init__(self, val, left=None, right=None):
+         self.val = val
+         self.left = left
+         self.right = right
+   
+def descending_leaves(root):
+	pass
+
+Example Input Tree #1: 
+
+      4
+     / \
+    /   \
+   2     5
+  / \    
+ 1   3    
+
+Input: root = 4
+Expected Output: [5, 3, 1]
+
+Example Input Tree #2: 
+ 10 
+
+Input: root = 4
+Expected Output: [10]
+UNDERSTAND
+    how can we gather all node values?
+    what can we do to return a list of the values in descedngins order?
+PLAN
+    make a list of ndoe values in inorder traversal order
+    return the list sorted backwards
+IMPLEMENT
+'''
+def descending_leaves(root):
+    lst = []
+    def helper(root):
+        if root is None:
+            return None
+        if root:
+            helper(root.left)
+            lst.append(root.val)
+            helper(root.right)
+    helper(root)
+    return lst[::-1]
+one = TreeNode(1)
+two = TreeNode(2)
+four = TreeNode(4)
+three = TreeNode(3)
+five = TreeNode(5)
+four.left = two
+four.right = five
+two.left = one
+two.right = three
+print(inorder_traversal(four))
+print(descending_leaves(four))
+print('END OF QUESTION 10')
