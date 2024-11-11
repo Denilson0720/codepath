@@ -74,9 +74,16 @@ def inorder_traversal(root):
         return None
     if root:
         inorder_traversal(root.left)
-        print(root.val)
-        # print(root.key/)
+        # print(root.val)
+        print(root.key)
         inorder_traversal(root.right)
+def inorder_traversal_by_value(root):
+    if root is None:
+        return None
+    if root:
+        inorder_traversal_by_value(root.left)
+        print(root.val)
+        inorder_traversal_by_value(root.right)
 class TreeNode:
     def __init__(self,val,left=None,right=None):
         self.val =val
@@ -221,3 +228,236 @@ node_2.right = node_5
 naruto = TreeNode(9,'naruto')
 new = insert(node_1,9,'naruto')
 inorder_traversal(new)
+# testing myself
+
+# understand
+# univalued - all node have equal value
+# i dont have to worry about it being nalanced or not
+# plan
+# base case covers
+    # empty tree
+    # once i go beyond a leaf node
+# if node==None:
+    # return True
+# if node.left!=node:
+    # return False
+# if node.right!=node:
+    # return False
+# recursive case:
+    # return uni(node.left) and uni(node.right)
+def is_univalued(node):
+    if node==None:
+        return True
+    if node.left and node.left.val!=node.val:
+        return False
+    if node.right and node.right.val!=node.val:
+        return False
+    return is_univalued(node.left) and is_univalued(node.right)
+print('node_1 is: ', is_univalued(node_1))
+
+# binary tree height
+
+# understand
+    # height is the amount of nodes from root and furtheset leaf node, bot inclusive of root and leaf
+    # ill have to traverse all nodes, not really important, well see
+    # will have to acount that left subtree and right subtree might not be the same height so will have to find the max between both
+# plan  
+    # go down each subtree adding 1 everytime we reach a new node
+    # find max between left and right subtree
+    # base case:
+        # if Node==None:
+            # return 0
+    # left_height = height(left)
+    # right_height = height(right)
+    # recursive case:
+        # return 1+ max(left, right )
+# implement
+def height(root):
+    if root==None:
+        return -1
+    left_height = height(root.left)
+    right_height = height(root.right)
+    
+    return 1+ max(left_height,right_height)
+print('height is: ', height(node_1))
+
+
+# bst insert
+# def insert(root,key,value):
+class TreeNode:
+    def __init__(self,key,val,left=None,right=None):
+        self.key = key
+        self.val = val
+        self.left = left
+        self.right = right
+'''
+    10
+   /  \
+  5    11
+/   \
+2    6  
+'''
+ten=TreeNode(10,10)
+five = TreeNode(5,5)
+eleven = TreeNode(11,11)
+two = TreeNode(2,2)
+six = TreeNode(6,6)
+ten.left = five
+ten.right = eleven
+five.left = two
+five.right = six
+print('inorder tree is: ')
+print(inorder_traversal(ten))
+# understand
+    # tree is sorted by key, node has key,value
+    # because it is a bst i dont need to visit every single node as i can conditionally traverse left or right subtree
+    # two base cases: where do i stop traversing?
+        # if root.key == key:
+            # root.val = value
+        # if root==None:
+            # return Node(key,value)
+    #recrusive steps
+        # if root.key>key:
+            # root.left = insert(root.left,key,value)
+        #else , if root.key<key:
+            # root.right = insert(root.right,key,value)
+    # return Node(root,key,value)
+# implement
+def insert(root,key,value):
+    # update value
+    if root.key==key:
+        root.val = value
+    if root==None:
+        return TreeNode(key,value)
+    if root.key>key:
+        # theres no way to assing a ndoe from bottom up so we go top to bottom assigning them
+        root.left =insert(root.left,key,value)
+    elif root.key<key:
+        root.right = insert(root.right,key,value)
+    # redudant but serves as fallback, since this was already taken care of in our first check
+    # else:
+        # return root
+    return root
+# print()
+new_tree = insert(ten,11,'naruto')
+inorder_traversal_by_value(new_tree)
+
+print('next question, removal of bst:')
+# removal of bst
+
+'''
+def remove_bst(root, key):
+	# Locate the node to be removed
+	# If the node is a leaf node:
+		# Remove the node by redirecting the appropriate child reference of its parent to None
+        # make node.child = None, by returning None
+	# If the node has one parent:
+		# Replace the node with its child, updating its parent's nodes child reference appropriately
+	# If the node has two children:
+		# Find the node's inorder successor (smallest node in right subtree)
+		# Swap the value of the node and its inorder successor
+		# Recursively remove the successor (which now has the current node's value)
+	# Return the root of the updated tree
+	pass
+    
+        10
+       /  \
+      5    15
+     / \
+    1   8
+       /  \
+       6   9
+inorder traversal : 1,5,6,8,9,10,15
+
+'''
+ten = TreeNode(10,10)
+five = TreeNode(5,5)
+fifteen = TreeNode(15,15)
+one  = TreeNode(1,1)
+eight = TreeNode(8,8)
+six = TreeNode(6,6)
+nine  = TreeNode(9,9)
+ten.left = five
+ten.right = fifteen
+five.left = one
+five.right = eight
+eight.left = six
+eight.right = nine
+inorder_traversal(ten)
+# used to find inorder succesor,smallest ndoe in the right subtree
+def find_min(node):
+    current=node
+    while current.left:
+        current = current.left
+    # return the whole node
+    return current
+def remove_bst(root,key):
+    if root is None:
+        return root
+    # located the node
+    if root.key<key:
+        root.right = remove_bst(root.right,key)
+    elif root.key>key:
+        root.left = remove_bst(root.left,key)
+    # found node to removed
+    else:
+        # if node is a leaf node
+        if root.left is None and root.right is None:
+            root = None
+        # if node only has 1 child, two cases make either root.right or root.left is new value
+            # if root.left is None, use root.rights value for the new root value
+        elif root.left is None:
+            root = root.right
+        elif root.right is None:
+            root = root.left
+        # if root has two child nodes
+        else:
+            #use the smallest node in the nodes right subtree as the new value for that node
+            #remove the smallest node using remove_bst(root.right) from the right subtree
+            # find min returns the ndoe as is, smallest key
+            temp = find_min(root.right)
+            root.key = temp.key
+            root.val = temp.val
+            # remove smallest node using remove_bst from right subtree
+            root.right = remove_bst(root.right,temp.key)
+    return root
+print('removal, new tree: ')
+new_tree = remove_bst(ten,8)
+inorder_traversal(new_tree)
+# inorder succesor using a given root but a a specific node current
+# THIS SOLUTION ONLY TAKES INTO ACCOUNT IF THE NODE HAS A RIGHT SUBTREE
+def inorder_succesor(root,current):
+    if root is None:
+        return None
+    if current.right is None and current.left is None:
+        return current
+    #if left subtree is non existent
+    if current.left is None:
+        return current.right
+      # find minimum of the right subtree of current
+    temp = current.right
+    while temp.left:
+        temp = temp.left
+    return temp
+result = inorder_succesor(ten,five)
+print(result.key)
+print('----')
+def print_rand(root):
+    if root is None:
+        return None
+    # print(root.val)
+    if root:
+        print_rand(root.left)
+        print(root.val)
+        print_rand(root.right)
+
+    # print_rand(root.left) and print_rand(root.right)
+print_rand(ten)
+def max_node(root):
+    if root is None:
+        return -9999
+    max_left = max_node(root.left)
+    max_right = max_node(root.right)
+
+    return max(max_left,max_right,root.val)
+print(max_node(ten))

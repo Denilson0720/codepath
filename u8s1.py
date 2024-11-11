@@ -662,3 +662,33 @@ two.right = three
 print(inorder_traversal(four))
 print(descending_leaves(four))
 print('END OF QUESTION 10')
+# instructor Richard Su's code
+class TreeNode:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+# Helper to print a binary tree.
+def printTree(node, level=0):
+    if node != None:
+        printTree(node.right, level + 1)
+        print(' ' * 4 * level + '-> ' + str(node.value))
+        printTree(node.left, level + 1)
+# Helper to create a BST.
+def createBst():
+    root = TreeNode(13)
+    root.left = TreeNode(6)
+    root.right = TreeNode(21)
+    root.left.left = TreeNode(4)
+    root.left.right = TreeNode(8)
+    root.right.left = TreeNode(15)
+    root.right.right = TreeNode(24)
+    return root
+def insertIntoBst(node, value):
+    if not node:
+        return TreeNode(value)
+    if node.value < value:
+        node.right = insertIntoBst(node.right, value)
+    else: # node.value > value
+        node.left = insertIntoBst(node.left, value)
+    return node

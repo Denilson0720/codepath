@@ -440,7 +440,7 @@ def remove_bst(root, key):
       if root.left is None and root.right is None:
           root = None
 
-      # If the node has only one child, make either existing child values its         own value
+      # If the node has only one child, make either existing child values its own value
       elif root.left is None:
           root = root.right
       elif root.right is None:
@@ -454,8 +454,9 @@ def remove_bst(root, key):
           root.key = temp.key
           root.val = temp.val
           # Recursively remove the successor (which now has the current node's value)
+          # use remove_bst to remove temp.key as we have swapped it
           root.right = remove_bst(root.right, temp.key)
-
+  return root
 node_1 = TreeNode(10,10)
 node_2 = TreeNode(8,8)
 node_3 = TreeNode(15,15)
@@ -466,9 +467,11 @@ node_5 = TreeNode(6,6)
 node_2.left = node_4
 node_2.right = node_5
 
-# traverse_inorder(node_1)
+inorder_traversal(node_1)
 print('removing')
-remove_bst(node_1,15)
+
+new_tree = remove_bst(node_1,15)
+inorder_traversal(new_tree)
 # traverse_inorder(node_1)
 print('END OF QUESTION 4')
 '''
@@ -524,20 +527,32 @@ PLAN
   if node has right subtree, successor is left most of that subtree
   if noe right subtree, one of parent nodes
 IMPLEMENTATION
+        10
+       /  \
+      5    15
+     / 
+    1   
+    inorder succesor of 5 is 10
 '''
+
 def inorder_successor(root, node):
+  # IF node has a right subtree
   if node.right:
       # The successor is the leftmost node of the right subtree
       return find_min(node.right)
-
+  # IF we dont have a right subtree well have to return the root, so traberse up
   # Traverse up the parent nodes
+  # successor set to none where we will only change it if we go left
   successor = None
   while root:
+      #we go left, reassign succesor to root
       if node.val < root.val:
           successor = root
           root = root.left
+      # we cannot go into the right subtree, it cant be there so we dont move succesor
       elif node.val > root.val:
           root = root.right
+      # we have found the node, so break out of loop
       else:
           break
   return successor
