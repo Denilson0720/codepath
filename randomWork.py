@@ -1,3 +1,4 @@
+from collections import deque
 # return kth distinct string in a list of strings
 def kth_distinct_string(lst,k):
     # make a frequency table
@@ -461,3 +462,199 @@ def max_node(root):
 
     return max(max_left,max_right,root.val)
 print(max_node(ten))
+print('LEVEL ORDER TRAVERSAL:')
+# return a list of the level order traversal of a bst
+def level_order_traversal(root):
+    if not root:
+        return []
+    queue = deque()
+    lst = []
+    queue.append(root)
+    while queue:
+        node = queue.popleft()
+        lst.append(node.val)
+        if node.left:
+            queue.append(node.left)
+        if node.right:
+            queue.append(node.right)
+    return lst
+'''
+        10
+       /  \
+      5    15
+     / \
+    1   8
+       /  \
+       6   9
+inorder traversal : 1,5,6,8,9,10,15
+level order: 10,5,15,1,8,6,9
+
+'''
+ten = TreeNode(10,10)
+five = TreeNode(5,5)
+fifteen = TreeNode(15,15)
+one  = TreeNode(1,1)
+eight = TreeNode(8,8)
+six = TreeNode(6,6)
+nine  = TreeNode(9,9)
+ten.left = five
+ten.right = fifteen
+five.left = one
+five.right = eight
+eight.left = six
+eight.right = nine
+print(level_order_traversal(ten))
+print('SHORTEST PATH QUESTION:')
+'''
+Problem 2: Find Minimum Depth of Binary Tree
+Given the root of a binary tree, return its minimum depth. The minimum depth is the number of nodes along the shortest path from the root down to the nearest leaf node.
+
+Evaluate the time complexity of your solution. Define your variables and give a rationale as to why you believe your solution has the stated time complexity.
+
+def min_depth(root):
+pass
+
+Example Input Tree #1:
+
+   3
+  / \
+ 9  20
+    / \  
+   15  7
+root = 3
+output = 2 
+-dont have to track the path itself
+    -just return the number of nodes
+    shortest = 1
+    update accordingly
+-traversal methods: BFS, DFS
+    BFS would allow us to look at the tree on a level by level basis,meaning a leaf node would be picked up early wether or not its in the right or left subtree
+PLAN
+    if not root:
+        return 0
+    if not root.left or right:
+        return 1
+    using a queue that is goign to keep track of the level by level order of the binary tree
+    the queue is going to hold tuples(node,depth) of each consequent node 
+    node,depth = q.popleft()
+    if we run into a leaf node, node.left and node.right ==None return depth
+    if node.left:
+        q.append(node.left)
+    if node.right:
+        q.append(ndoe.right)
+    return -1, fallback
+
+
+'''
+def shortest_path_nodes(root):
+    if not root:
+        return 0
+    if not root.left and not root.right:
+        return 1
+    q = deque()
+    q.append((root,1))
+    while q:
+        node,depth = q.popleft()
+        # if we reach a leaf node
+        if not node.left and not node.right:
+            return depth
+        if node.left:
+            q.append((node.left,depth+1))
+        if node.right:
+            q.append((node.right,depth+1))
+    return -1
+print(shortest_path_nodes(ten))
+root = TreeNode(1,1)
+print(shortest_path_nodes(root))
+# empty tree
+print(shortest_path_nodes(None))
+print('EVEN ODD LEVEL DIFFERENCE')
+'''
+def level_difference(root):
+  pass
+
+Example Input Tree
+          6
+         / \
+        3   8
+       /   / \  
+      5   4   2
+         / \   \
+        1   7   3
+Expected Output: -5
+Explanation: 
+Odd level sum: 6 + 5 + 4 + 2 = 17
+Even level sum: 3 + 8 + 1 + 7 + 3 = 22
+Odd level sum - even level sum: 17 - 22 = -5
+UNDERSTAND
+    root is always guaranteed
+    base cases:
+    if not root.left and root.right:
+        return root.val
+    return odd sum - even sum
+PLAN
+    odd_sum = 0
+    even_sum = 0
+    traversal using BFS approach
+    using a queue thats going to keep track of each consequent node in a level by level order
+    im going to store the nodes as tuples(node,depth)
+    while queue:
+        node = queue.popleft()
+        if depth is odd:
+            odd_sum+=node.val
+        if depth is even:
+            add val to even sum
+        if node.left:
+            queue.append(node.left)
+        if node.right:
+            queue.append(node.right)
+    return odd_sum - even_sum
+IMPLEMENT
+'''
+def level_difference(root):
+    if not root.left and not root.right:
+        return root.val
+    odd_sum = 0
+    even_sum = 0
+    q = deque()
+    q.append((root,1))
+    while q:
+        node,depth = q.popleft()
+        if depth%2!=0:
+            odd_sum+=node.val
+        if depth%2==0:
+            even_sum+=node.val
+        if node.left:
+            q.append((node.left,depth+1))
+        if node.right:
+            q.append((node.right,depth+1))
+    return odd_sum - even_sum
+# print(level_difference())
+#     6
+#    / \
+#   3   8
+#  /   / \  
+# 5   4   2
+#    / \   \
+#   1   7   3
+# even = 11+11 = 22
+# odd = 6 + 11 = 17
+# 17 -22 = -5
+root = TreeNode(6,6)
+three = TreeNode(3,3)
+eight = TreeNode(8,8)
+five = TreeNode(5,5)
+four = TreeNode(4,4)
+two = TreeNode(2,2)
+one = TreeNode(1,1)
+seven = TreeNode(7,7)
+second_three = TreeNode(3,3)
+root.left = three
+root.right = eight
+three.left = five
+eight.left = four
+eight.right = two
+four.left = one
+four.right = seven
+two.right = second_three
+print(level_difference(root))
